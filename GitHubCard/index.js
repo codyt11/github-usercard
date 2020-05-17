@@ -3,7 +3,32 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+const followersArray = [
+  'https://api.github.com/users/slroberts',
+  'https://api.github.com/users/PauloFurtunatoAlexandre',
+  'https://api.github.com/users/Jfadelli'
+];
 
+axios.get('https://api.github.com/users/codyt11')
+  .then(response => {
+    const dataItem = response.data
+    const cardData = document.querySelector('.cards')
+    cardData.appendChild(gitCard(dataItem))
+  })
+  .then(response => {
+    followersArray.forEach(item => {
+      axios.get(item)
+        .then(response => {
+          const dataItem = response.data
+          const cardData = document.querySelector('.cards')
+          cardData.appendChild(gitCard(dataItem))
+        })
+    })
+  })
+
+  .catch(err => {
+    alert(err);
+  })
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -16,6 +41,44 @@
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+const gitCard = (dataItem) =>{
+  const card = document.createElement('div');
+  const img = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const userName = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username');
+
+  card.appendChild(img);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  img.src = dataItem.avatar_url;
+  name.textContent = dataItem.name;
+  userName.textContent = dataItem.userName;
+  location.textContent = dataItem.location;
+  profile.textContent = dataItem.html_url;
+  followers.textContent = dataItem.followers;
+  following.textContent = dataItem.following;
+  bio.textContent = dataItem.bio;
+
+  return card;
+}
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -28,7 +91,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
